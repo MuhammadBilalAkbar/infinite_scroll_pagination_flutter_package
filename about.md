@@ -297,10 +297,23 @@ Here `PageKeyType` is `int` and `ItemType` is `PostModel`.
 
 - `pagingController` and `builderDelegate` are required for `PagedListView`.
 - `builderDelegate` accepts `PagedChildBuilderDelegate<ItemType>`.
+  <br/>`PagedChildBuilderDelegate` object also gives the flexibility to customize error handling and
+  progress operations via the following optional parameters:
 
-`PagedChildBuilderDelegate` has many properties. `itemBuilder` is its required property. Other
-optional properties are `firstPageErrorIndicatorBuilder`, `newPageErrorIndicatorBuilder`
-, `noItemsFoundIndicatorBuilder`and `noMoreItemsIndicatorBuilder`.
+    - `newPageErrorIndicatorBuilder`: This handles errors that occur when making more requests for
+      data. A widget that will render beneath the already-loaded data when an error occurs.
+    - `firstPageErrorIndicatorBuilder`: This handles errors that occur when making the first request
+      for data. The widget assigned to this operation renders at the center of the screen because
+      the screen is empty at this point.
+    - `firstPageProgressIndicatorBuilder`: Widget appears at the center of the screen when the app
+      requests its first paginated data.
+    - `newPageProgressIndicatorBuilder`: Widget appears beneath the pre-existing data when the app
+      requests more data.
+    - `noItemsFoundIndicatorBuilder`: Widget that renders when the API returns an empty collection
+      of data. This is not considered an error because, technically, the API call was successful but
+      there was no data found
+    - `noMoreItemsIndicatorBuilder`: Widget to render when the user has exhausted all the data
+      returned by the API
 
 - If `index` of itemBuilder equals to the `pagingController.itemList!.length - 1` then show text
   of `No more data` at the end.
