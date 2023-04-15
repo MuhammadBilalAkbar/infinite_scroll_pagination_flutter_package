@@ -29,22 +29,6 @@ class InfiniteScrollPaginationPageState
       fetchPage(pageKey);
     });
 
-    // pagingController.addStatusListener((status) {
-    //   if (status == PagingStatus.subsequentPageError) {
-    //     ScaffoldMessenger.of(context).showSnackBar(
-    //       SnackBar(
-    //         content: const Text(
-    //           'Something went wrong while fetching a new page.',
-    //         ),
-    //         action: SnackBarAction(
-    //           label: 'Retry',
-    //           onPressed: () => pagingController.retryLastFailedRequest(),
-    //         ),
-    //       ),
-    //     );
-    //   }
-    // });
-
     super.initState();
   }
 
@@ -61,7 +45,6 @@ class InfiniteScrollPaginationPageState
             "https://jsonplaceholder.typicode.com/posts?_page=$pageKey&_limit=$numberOfPostsPerRequest"),
       );
       List responseList = json.decode(response.body);
-      // debugPrint(responseList.toString());
       List<PostModel> postList = responseList
           .map((data) => PostModel(
                 id: data['id'],
