@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-import 'model/post.dart';
-import 'widgets/post_item.dart';
+import 'model/post_model.dart';
+import 'widgets/post_item_widget.dart';
 
 class InfiniteScrollPaginator extends StatefulWidget {
   const InfiniteScrollPaginator({super.key});
@@ -18,7 +18,7 @@ class InfiniteScrollPaginator extends StatefulWidget {
 class InfiniteScrollPaginatorState extends State<InfiniteScrollPaginator> {
   static const numberOfPostsPerRequest = 10;
 
-  final PagingController<int, Post> pagingController =
+  final PagingController<int, PostModel> pagingController =
       PagingController(firstPageKey: 1);
 
   @override
@@ -26,6 +26,23 @@ class InfiniteScrollPaginatorState extends State<InfiniteScrollPaginator> {
     pagingController.addPageRequestListener((pageKey) {
       fetchPage(pageKey);
     });
+
+    // pagingController.addStatusListener((status) {
+    //   if (status == PagingStatus.subsequentPageError) {
+    //     ScaffoldMessenger.of(context).showSnackBar(
+    //       SnackBar(
+    //         content: const Text(
+    //           'Something went wrong while fetching a new page.',
+    //         ),
+    //         action: SnackBarAction(
+    //           label: 'Retry',
+    //           onPressed: () => pagingController.retryLastFailedRequest(),
+    //         ),
+    //       ),
+    //     );
+    //   }
+    // });
+
     super.initState();
   }
 
@@ -43,8 +60,8 @@ class InfiniteScrollPaginatorState extends State<InfiniteScrollPaginator> {
       );
       List responseList = json.decode(response.body);
       // debugPrint(responseList.toString());
-      List<Post> postList = responseList
-          .map((data) => Post(
+      List<PostModel> postList = responseList
+          .map((data) => PostModel(
                 id: data['id'],
                 title: data['title'],
                 body: data['body'],
@@ -71,9 +88,9 @@ class InfiniteScrollPaginatorState extends State<InfiniteScrollPaginator> {
         ),
         body: RefreshIndicator(
           onRefresh: () => Future.sync(pagingController.refresh),
-          child: PagedListView<int, Post>(
+          child: PagedListView<int, PostModel>(
             pagingController: pagingController,
-            builderDelegate: PagedChildBuilderDelegate<Post>(
+            builderDelegate: PagedChildBuilderDelegate<PostModel>(
                 animateTransitions: true,
                 itemBuilder: (context, item, index) {
                   if (index == pagingController.itemList!.length - 1) {
@@ -82,7 +99,7 @@ class InfiniteScrollPaginatorState extends State<InfiniteScrollPaginator> {
                       child: Center(child: Text('No more data')),
                     );
                   }
-                  return PostItem(
+                  return PostItemWidget(
                     id: item.id,
                     title: item.title,
                     body: item.body,

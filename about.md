@@ -65,23 +65,30 @@
 
 **Problems from Flutter Stackoverflow**
 
-- _[Add here any links to problems people face with this topic ...]_
-- _[Add stackoverflow links "Flutter [Your Topic] not working" etc. ...]_
+- https://stackoverflow.com/questions/71005365/how-to-do-infinite-scrolling-in-flutter
+- https://stackoverflow.com/questions/70369703/flutter-how-using-sliverappbar-with-infinite-scroll-pagination
+- https://stackoverflow.com/questions/67833149/how-to-use-infinite-scroll-pagination-for-bloc-pattern
+- https://stackoverflow.com/questions/75048292/how-to-implement-infinite-scroll-pagination-the-right-way
+- https://stackoverflow.com/questions/68103695/how-do-infinite-scroll-pagination-in-flutter
 
 ## 3. Video Structure
 
 **Main Points / Purpose Of Lesson**
 
-1. _[Why is it useful for the viewer to learn more about what we teach in this video lesson?]_
-2. _[What are the main points of this video lesson]_
-    - _[Add here multiple main points ...]_
-    - _[...]_
-3. _[Out of 1. & 2. create 2-3 sentences that could be later used for recording the introduction of this video lesson]_
+1. In this video, you will learn how to infinite scroll a ListView, SliverGrid or SliverList.
+2. Main points:
+    - `numberOfPostsPerRequest` and `PagingController` to control posts.
+    - `PagedListView` to show posts in the form of ListView.
+3. `PagedSliverGrid` and `PagedSliverList` can also be used for infinite scroll.
 
 **The Structured Main Content**
 
-1. _[Add here the main topics the video project is covering in chronological order. For each topic add the main points how this lesson can be taught step by step to beginners who never did anything related to what this lesson is about]_
-2. _[e.g. for this video project: https://www.youtube.com/watch?v=MSv38jO4EJk]_
+1. Run `dart pub add infinite_scroll_pagination` in your project's terminal to add this package
+   in `pubspec.yaml` file.
+
+   Import `import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';` where you
+   want to use this package in your project.
+2. posts_model.dart contains the simple model of post coming
     - _[1. Setup Android & iOS]_
         - _[Add for each topic more detailed steps ...]_
         - _[...]_

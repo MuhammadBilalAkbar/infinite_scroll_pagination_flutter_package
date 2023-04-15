@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class PostItem extends StatelessWidget {
+class PostItemWidget extends StatelessWidget {
   final String title;
   final String body;
   final int id;
 
-  const PostItem({
+  const PostItemWidget({
     super.key,
     required this.id,
     required this.title,
@@ -18,9 +18,7 @@ class PostItem extends StatelessWidget {
         child: Container(
           height: MediaQuery.of(context).size.height * 0.3,
           decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(
-              Radius.circular(15),
-            ),
+            borderRadius: BorderRadius.all(Radius.circular(15)),
             color: Colors.amber,
           ),
           child: Padding(
@@ -37,10 +35,7 @@ class PostItem extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10),
-                Text(
-                  body,
-                  style: const TextStyle(fontSize: 15),
-                ),
+                Text(body, style: const TextStyle(fontSize: 15)),
               ],
             ),
           ),

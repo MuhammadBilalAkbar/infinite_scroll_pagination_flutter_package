@@ -1,9 +1,9 @@
-class Post {
+class PostModel {
   final String title;
   final String body;
   final int id;
 
-  Post({
+  PostModel({
     required this.id,
     required this.title,
     required this.body,
