@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'infinite_scroll_paginator.dart';
+import 'infinite_scroll_pagination_page.dart';
 
 void main() => runApp(const MyApp());
 
@@ -15,6 +15,6 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.purple,
           appBarTheme: const AppBarTheme(centerTitle: true),
         ),
-        home: const InfiniteScrollPaginator(),
+        home: const InfiniteScrollPaginationPage(),
       );
 }

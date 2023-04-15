@@ -8,14 +8,16 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'model/post_model.dart';
 import 'widgets/post_item_widget.dart';
 
-class InfiniteScrollPaginator extends StatefulWidget {
-  const InfiniteScrollPaginator({super.key});
+class InfiniteScrollPaginationPage extends StatefulWidget {
+  const InfiniteScrollPaginationPage({super.key});
 
   @override
-  InfiniteScrollPaginatorState createState() => InfiniteScrollPaginatorState();
+  InfiniteScrollPaginationPageState createState() =>
+      InfiniteScrollPaginationPageState();
 }
 
-class InfiniteScrollPaginatorState extends State<InfiniteScrollPaginator> {
+class InfiniteScrollPaginationPageState
+    extends State<InfiniteScrollPaginationPage> {
   static const numberOfPostsPerRequest = 10;
 
   final PagingController<int, PostModel> pagingController =

@@ -88,10 +88,220 @@
 
    Import `import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';` where you
    want to use this package in your project.
-2. posts_model.dart contains the simple model of post coming
-    - _[1. Setup Android & iOS]_
-        - _[Add for each topic more detailed steps ...]_
-        - _[...]_
-    - _[2. Pick Image From Gallery]_
-    - _[3. Pick Image From Camera]_
-    - _[4. Persist Images To Local Storage]_
+2. We will use mock APIs of Posts section
+   of [https://jsonplaceholder.typicode.com](https://jsonplaceholder.typicode.com) for demo purpose
+   of this package.
+3. `posts_model.dart` contains the simple model of post coming from API.
+
+```dart
+class PostModel {
+  final String title;
+  final String body;
+  final int id;
+
+  PostModel({
+    required this.id,
+    required this.title,
+    required this.body,
+  });
+}
+
+```
+
+4. `post_item_widget.dart` contains UI of post item which will be shown
+   in `InfiniteScrollPaginationPage` in `infinite_scroll_pagination_page.dart`.
+
+```dart
+import 'package:flutter/material.dart';
+
+class PostItemWidget extends StatelessWidget {
+  final String title;
+  final String body;
+  final int id;
+
+  const PostItemWidget({
+    super.key,
+    required this.id,
+    required this.title,
+    required this.body,
+  });
+
+  @override
+  Widget build(BuildContext context) =>
+      Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Container(
+          height: MediaQuery
+              .of(context)
+              .size
+              .height * 0.3,
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(15)),
+            color: Colors.amber,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  '$id: $title',
+                  style: const TextStyle(
+                    color: Colors.purple,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(body, style: const TextStyle(fontSize: 15)),
+              ],
+            ),
+          ),
+        ),
+      );
+}
+
+```
+
+5. `infinite_scroll_pagination_page.dart` contains ListView part of Infinite Scroll Pagination Demo
+   of the package.
+
+![output gif](output.gif)
+
+- Initialize the following:
+
+```dart
+
+static const numberOfPostsPerRequest = 10;
+
+final PagingController<int, PostModel> pagingController =
+PagingController(firstPageKey: 1);
+```
+
+- In `initState`, call the `addPageRequestListener` to listen page changes:
+
+`fetchPage(fetchPage(int pageKey))` method is called here to fetch the post when page opens.
+
+```dart
+  @override
+void initState() {
+  pagingController.addPageRequestListener((pageKey) {
+    fetchPage(pageKey);
+  });
+  super.initState();
+}
+```
+
+`fetchPage(fetchPage(int pageKey))` method:
+
+```dart
+  Future<void> fetchPage(int pageKey) async {
+  try {
+    final response = await get(
+      Uri.parse(
+          "https://jsonplaceholder.typicode.com/posts?_page=$pageKey&_limit=$numberOfPostsPerRequest"),
+    );
+    List responseList = json.decode(response.body);
+    // debugPrint(responseList.toString());
+    List<PostModel> postList = responseList
+        .map((data) =>
+        PostModel(
+          id: data['id'],
+          title: data['title'],
+          body: data['body'],
+        ))
+        .toList();
+    final isLastPage = postList.length < numberOfPostsPerRequest;
+    if (isLastPage) {
+      pagingController.appendLastPage(postList);
+      debugPrint('All pages ended. This is the last page');
+    } else {
+      final nextPageKey = pageKey + 1;
+      pagingController.appendPage(postList, nextPageKey);
+    }
+  } catch (e) {
+    debugPrint("error --> $e");
+    pagingController.error = e;
+  }
+}
+```
+
+`pagingController.addStatusListener` can also be used to listen to the status pages inside
+the `initState`, it is optional:
+
+```dart 
+    pagingController.addStatusListener((status) {
+      if (status == PagingStatus.subsequentPageError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text(
+              'Something went wrong while fetching a new page.',
+            ),
+            action: SnackBarAction(
+              label: 'Retry',
+              onPressed: () => pagingController.retryLastFailedRequest(),
+            ),
+          ),
+        );
+      }
+    });
+```
+
+- Remember to dispose the `pagingController` in the end:
+
+```dart
+
+@override
+void dispose() {
+  super.dispose();
+  pagingController.dispose();
+}
+```
+
+- UI of page:
+
+```dart 
+
+   Scaffold(
+        appBar: AppBar(
+          title: const Text("Infinite Scroll Pagination Package"),
+        ),
+        body: RefreshIndicator(
+          onRefresh: () => Future.sync(pagingController.refresh),
+          child: PagedListView<int, PostModel>(
+            pagingController: pagingController,
+            builderDelegate: PagedChildBuilderDelegate<PostModel>(
+                animateTransitions: true,
+                itemBuilder: (context, item, index) {
+                  if (index == pagingController.itemList!.length - 1) {
+                    return const Padding(
+                      padding: EdgeInsets.only(bottom: 15),
+                      child: Center(child: Text('No more data')),
+                    );
+                  }
+                  return PostItemWidget(
+                    id: item.id,
+                    title: item.title,
+                    body: item.body,
+                  );
+                }),
+          ),
+        ),
+      ),
+```
+
+- `PagedListView` is of type `<PageKeyType, ItemType>` and wrapped with `RefreshIndicator` to
+  refresh the page.
+
+Here `PageKeyType` is `int` and `ItemType` is `PostModel`.
+
+- `pagingController` and `builderDelegate` are required for `PagedListView`.
+- `builderDelegate` accepts `PagedChildBuilderDelegate<ItemType>`.
+
+`PagedChildBuilderDelegate` has many properties. `itemBuilder` is its required property. Other
+optional properties are `firstPageErrorIndicatorBuilder`, `newPageErrorIndicatorBuilder`
+, `noItemsFoundIndicatorBuilder`and `noMoreItemsIndicatorBuilder`.
+
+- If `index` of itemBuilder equals to the `pagingController.itemList!.length - 1` then show text
+  of `No more data` at the end.
+- Otherwise, return the `PostItemWidget` with id, title and body.
