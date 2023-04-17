@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'infinite_scroll_pagination_page.dart';
+import 'pages/infinite_scroll_pagination_page.dart';
 
 void main() => runApp(const MyApp());
 

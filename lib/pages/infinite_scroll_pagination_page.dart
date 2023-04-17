@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-import 'model/post_model.dart';
-import 'widgets/post_item_widget.dart';
+import '../model/post_model.dart';
+import '../widgets/post_item_widget.dart';
 
 class InfiniteScrollPaginationPage extends StatefulWidget {
   const InfiniteScrollPaginationPage({super.key});
