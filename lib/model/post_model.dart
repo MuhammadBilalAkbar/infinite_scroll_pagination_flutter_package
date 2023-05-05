@@ -1,7 +1,7 @@
 class PostModel {
+  final int id;
   final String title;
   final String body;
-  final int id;
 
   PostModel({
     required this.id,

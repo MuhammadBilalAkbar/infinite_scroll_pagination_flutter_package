@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class PostItemWidget extends StatelessWidget {
+class PostWidget extends StatelessWidget {
+  final int id;
   final String title;
   final String body;
-  final int id;
 
-  const PostItemWidget({
+  const PostWidget({
     super.key,
     required this.id,
     required this.title,
@@ -23,20 +23,22 @@ class PostItemWidget extends StatelessWidget {
           ),
           child: Padding(
             padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  '$id: $title',
-                  style: const TextStyle(
-                    color: Colors.purple,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    '$id: $title',
+                    style: const TextStyle(
+                      color: Colors.purple,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 10),
-                Text(body, style: const TextStyle(fontSize: 15)),
-              ],
+                  const SizedBox(height: 10),
+                  Text(body),
+                ],
+              ),
             ),
           ),
         ),

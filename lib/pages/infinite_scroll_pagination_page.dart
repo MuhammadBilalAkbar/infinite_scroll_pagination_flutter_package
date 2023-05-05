@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-import '../model/post_model.dart';
-import '../widgets/post_item_widget.dart';
+import '/model/post_model.dart';
+import '/widgets/post_widget.dart';
 
 class InfiniteScrollPaginationPage extends StatefulWidget {
   const InfiniteScrollPaginationPage({super.key});
@@ -25,27 +25,26 @@ class InfiniteScrollPaginationPageState
 
   @override
   void initState() {
+    super.initState();
     pagingController.addPageRequestListener((pageKey) {
       fetchPage(pageKey);
     });
-
-    super.initState();
   }
 
   @override
   void dispose() {
-    super.dispose();
     pagingController.dispose();
+    super.dispose();
   }
 
   Future<void> fetchPage(int pageKey) async {
     try {
       final response = await get(
         Uri.parse(
-            "https://jsonplaceholder.typicode.com/posts?_page=$pageKey&_limit=$numberOfPostsPerRequest"),
+            'https://jsonplaceholder.typicode.com/posts?_page=$pageKey&_limit=$numberOfPostsPerRequest'),
       );
       List responseList = json.decode(response.body);
-      List<PostModel> postList = responseList
+      final postList = responseList
           .map((data) => PostModel(
                 id: data['id'],
                 title: data['title'],
@@ -60,16 +59,16 @@ class InfiniteScrollPaginationPageState
         final nextPageKey = pageKey + 1;
         pagingController.appendPage(postList, nextPageKey);
       }
-    } catch (e) {
-      debugPrint("error --> $e");
-      pagingController.error = e;
+    } catch (error) {
+      debugPrint('error --> $error');
+      pagingController.error = error;
     }
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: const Text("Infinite Scroll Pagination Package"),
+          title: const Text('Infinite Scroll Pagination Package'),
         ),
         body: RefreshIndicator(
           onRefresh: () => Future.sync(pagingController.refresh),
@@ -84,7 +83,7 @@ class InfiniteScrollPaginationPageState
                       child: Center(child: Text('No more data')),
                     );
                   }
-                  return PostItemWidget(
+                  return PostWidget(
                     id: item.id,
                     title: item.title,
                     body: item.body,

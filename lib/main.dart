@@ -13,7 +13,16 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.purple,
-          appBarTheme: const AppBarTheme(centerTitle: true),
+          appBarTheme: const AppBarTheme(
+            centerTitle: true,
+            titleTextStyle: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          textTheme: const TextTheme(
+            bodyMedium: TextStyle(fontSize: 20),
+          ),
         ),
         home: const InfiniteScrollPaginationPage(),
       );
