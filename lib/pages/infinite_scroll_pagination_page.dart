@@ -18,7 +18,7 @@ class InfiniteScrollPaginationPage extends StatefulWidget {
 
 class InfiniteScrollPaginationPageState
     extends State<InfiniteScrollPaginationPage> {
-  static const numberOfPostsPerRequest = 10;
+  static const numberOfPostsPerRequest = 20;
 
   final PagingController<int, PostModel> pagingController =
       PagingController(firstPageKey: 1);
@@ -75,20 +75,22 @@ class InfiniteScrollPaginationPageState
           child: PagedListView<int, PostModel>(
             pagingController: pagingController,
             builderDelegate: PagedChildBuilderDelegate<PostModel>(
-                animateTransitions: true,
-                itemBuilder: (context, item, index) {
-                  if (index == pagingController.itemList!.length - 1) {
-                    return const Padding(
-                      padding: EdgeInsets.only(bottom: 15),
-                      child: Center(child: Text('No more data')),
-                    );
-                  }
+              animateTransitions: true,
+              itemBuilder: (context, item, index) {
+                if (index == pagingController.itemList!.length - 1) {
+                  return const Padding(
+                    padding: EdgeInsets.only(bottom: 15),
+                    child: Center(child: Text('No more data')),
+                  );
+                } else {
                   return PostWidget(
                     id: item.id,
                     title: item.title,
                     body: item.body,
                   );
-                }),
+                }
+              },
+            ),
           ),
         ),
       );
